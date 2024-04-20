@@ -1,7 +1,7 @@
 package main_test
 
 import (
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 	"os/exec"
@@ -41,7 +41,7 @@ func TestMain(m *testing.M) {
 
 	defer func() { os.Exit(retcode) }()
 
-	tempdir, err = ioutil.TempDir("", "*")
+	tempdir, err = os.MkdirTemp("", "*")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,7 +52,7 @@ func TestMain(m *testing.M) {
 	// Build ets and test fixtures to tempdir.
 	compile(rootdir, executable)
 	fixturesdir := path.Join(rootdir, "fixtures")
-	content, err := ioutil.ReadDir(fixturesdir)
+	content, err := os.ReadDir(fixturesdir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -377,7 +377,7 @@ func TestWindowSize(t *testing.T) {
 				t.Fatalf("failed to start command in pty: %s", err)
 			}
 			defer func() { _ = ptmx.Close() }()
-			output, err := ioutil.ReadAll(ptmx)
+			output, err := io.ReadAll(ptmx)
 			// TODO: figure out why we get &os.PathError{Op:"read", Path:"/dev/ptmx", Err:0x5} on Linux.
 			// https://github.com/creack/pty/issues/100
 			if len(output) == 0 && err != nil {
