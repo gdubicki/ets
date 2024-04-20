@@ -25,6 +25,7 @@ The purpose of `ets` is similar to that of moreutils [`ts(1)`](https://manpages.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Comparison to moreutils ts](#comparison-to-moreutils-ts)
+- [Changelog](#changelog)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -391,6 +392,10 @@ Disadvantages:
 - Needs an additional `-f` for format string, because ets reserves positional arguments for its core competency. Hopefully offset by better default.
 - Does not support the `-r` mode of ts. It's a largely unrelated mode of operation and I couldn't even get `ts -r` to work anywhere, maybe because optional dependencies aren't satisfied, or maybe I misunderstood the feature altogether. Anyway, not interested.
 - Supports fewer formatting directives. Let me know if this is actually an issue, it could be fixable.
+
+## Changelog
+
+See [here](./CHANGELOG.md).
 
 ## License
 
