@@ -1,8 +1,8 @@
 <h1 align="center"><img src="assets/logo.svg" height="50" alt="ets" /></h1>
 
 <p align="center">
-  <a href="https://github.com/zmwangx/ets/releases"><img src="https://img.shields.io/github/v/release/zmwangx/ets" alt="GitHub release" /></a>
-  <a href="https://github.com/zmwangx/ets/actions"><img src="https://github.com/zmwangx/ets/workflows/test/badge.svg?branch=master" alt="Build status" /></a>
+  <a href="https://github.com/gdubicki/ets/releases"><img src="https://img.shields.io/github/v/release/gdubicki/ets" alt="GitHub release" /></a>
+  <a href="https://github.com/gdubicki/ets/actions"><img src="https://github.com/gdubicki/ets/workflows/test/badge.svg?branch=master" alt="Build status" /></a>
 </p>
 
 <p align="center"><img src="assets/animation.svg" alt="ets" /></p>
@@ -136,11 +136,11 @@ $ ets -c ping localhost
 - On macOS you can install ets with Homebrew:
 
   ```
-  brew tap zmwangx/ets https://github.com/zmwangx/ets
-  brew install zmwangx/ets/ets
+  brew tap gdubicki/ets https://github.com/gdubicki/ets
+  brew install gdubicki/ets/ets
   ```
 
-- On macOS and Linux you get download a prebuilt tarball/package from the [release page](https://github.com/zmwangx/ets/releases).
+- On macOS and Linux you get download a prebuilt tarball/package from the [release page](https://github.com/gdubicki/ets/releases).
 
 - On Arch Linux you can install the [ets-bin](https://aur.archlinux.org/packages/ets-bin/) binary package from AUR:
 
@@ -153,7 +153,7 @@ $ ets -c ping localhost
 - On a supported platform, if you have the Go toolchain installed, you may install with
 
   ```
-  go get github.com/zmwangx/ets
+  go get github.com/gdubicki/ets
   ```
 
 ## Usage
