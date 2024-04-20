@@ -1,3 +1,3 @@
-module github.com/zmwangx/ets/fxitures/basic
+module github.com/gdubicki/ets/fxitures/basic
 
-go 1.14
+go 1.22

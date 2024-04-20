@@ -1,3 +1,3 @@
-module github.com/zmwangx/ets/fxitures/timed
+module github.com/gdubicki/ets/fxitures/timed
 
-go 1.14
+go 1.22
