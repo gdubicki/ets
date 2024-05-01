@@ -130,7 +130,7 @@ func main() {
 	var elapsedMode = flag.BoolP("elapsed", "s", false, "show elapsed timestamps")
 	var incrementalMode = flag.BoolP("incremental", "i", false, "show incremental timestamps")
 	var format = flag.StringP("format", "f", "", "show timestamps in this format")
-	var delim = flag.StringP("delim", "d", " ", "delimiter after timestamp (default is space)")
+	var delim = flag.StringP("delim", "d", " ", "delimiter after timestamp")
 	var utc = flag.BoolP("utc", "u", false, "show absolute timestamps in UTC")
 	var timezoneName = flag.StringP("timezone", "z", "", "show absolute timestamps in this timezone, e.g. America/New_York")
 	var color = flag.BoolP("color", "c", false, "show timestamps in color")
