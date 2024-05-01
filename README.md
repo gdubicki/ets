@@ -1,5 +1,5 @@
 <p align="center">A fork of <a href="https://github.com/zmwangx/ets">https://github.com/zmwangx/ets</a>, written by <a href="https://github.com/zmwangx">Zhiming Wang</a></p>
-<p align="center">with a release in 2024, maybe it will stay maintained, we'll see!</p>
+<p align="center">with a release and updates in 2024</p>
 
 <h1 align="center"><img src="assets/logo.svg" height="50" alt="ets" /></h1>
 
@@ -20,12 +20,12 @@ The purpose of `ets` is similar to that of moreutils [`ts(1)`](https://manpages.
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Examples](#examples)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Comparison to moreutils ts](#comparison-to-moreutils-ts)
 - [Changelog](#changelog)
+- [Releases](#releases)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -135,9 +135,20 @@ $ ets -c ping localhost
 ...
 ```
 
+Change the delimiter:
+
+```console
+$ ets -d " | " ping localhost
+[2024-04-30 08:51:51] | PING localhost (127.0.0.1): 56 data bytes
+[2024-04-30 08:51:51] | 64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.070 ms
+[2024-04-30 08:51:52] | 64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.078 ms
+[2024-04-30 08:51:53] | 64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.096 ms
+...
+```
+
 ## Installation
 
-- On macOS you can install ets with Homebrew:
+- On macOS, you can install ets with Homebrew:
 
   ```
   brew tap gdubicki/ets https://github.com/gdubicki/ets
@@ -145,14 +156,6 @@ $ ets -c ping localhost
   ```
 
 - On macOS and Linux you get download a prebuilt tarball/package from the [release page](https://github.com/gdubicki/ets/releases).
-
-- On Arch Linux you can install the [ets-bin](https://aur.archlinux.org/packages/ets-bin/) binary package from AUR:
-
-  ```sh
-  pacman -S ets-bin
-  # or
-  yay -S ets-bin
-  ```
 
 - On a supported platform, if you have the Go toolchain installed, you may install with
 
@@ -165,14 +168,14 @@ $ ets -c ping localhost
 <!-- begin manpage -->
 
 ```
-
-ETS(1)                    BSD General Commands Manual                   ETS(1)
+ETS(1)                      General Commands Manual                     ETS(1)
 
 NAME
-     ets -- command output timestamper
+     ets - command output timestamper
 
 SYNOPSIS
-     ets [-s | -i] [-f format] [-u | -z timezone] command [arg ...]
+     ets [-s | -i] [-f format] [-u | -z timezone] [-d delimiter] command
+         [arg ...]
      ets [options] shell_command
      ets [options]
 
@@ -186,12 +189,12 @@ DESCRIPTION
        arguments, execute the command with exec in a pty;
 
      o If given a single command with whitespace(s), the command is treated as
-       a shell command and executed as `SHELL -c shell_command', where SHELL
-       is the current user's login shell, or sh if login shell cannot be
+       a shell command and executed as `SHELL -c shell_command',where SHELL is
+       the current user's login shell, or sh if login shell cannot be
        determined;
 
-     o If given no command, output is read from stdin, and the user is respon-
-       sible for piping in a command's output.
+     o If given no command, output is read from stdin, and the user is
+       responsible for piping in a command's output.
 
      There are three mutually exclusive timestamp modes:
 
@@ -223,8 +226,8 @@ DESCRIPTION
               Use custom strftime(3)-style format string format for prefixed
               timestamps.
 
-              The default is ``[%Y-%m-%d %H:%M:%S]'' for absolute time mode
-              and ``[%H:%M:%S]'' for elapsed and incremental time modes.
+              The default is "[%Y-%m-%d %H:%M:%S]" for absolute time mode and
+              "[%H:%M:%S]" for elapsed and incremental time modes.
 
               See FORMATTING DIRECTIVES for details.
 
@@ -235,13 +238,18 @@ DESCRIPTION
 
      -z, --timezone timezone
               Use timezone for absolute timestamps instead of local time.
-              timezone is an IANA time zone name, e.g.
-              ``America/Los_Angeles''.
+              timezone is an IANA time zone name, e.g.  "America/Los_Angeles".
 
               This option is mutually exclusive with -u, --utc.
 
      -c, --color
               Print timestamps in color.
+
+     -d, --delimit
+              Change the delimiter between the timestamp and the command
+              output.
+
+              The default is space.
 
 FORMATTING DIRECTIVES
      Formatting directives largely match strftime(3)'s directives on FreeBSD
@@ -273,14 +281,14 @@ FORMATTING DIRECTIVES
 
      %c    is replaced by national representation of time and date.
 
-     %D    is equivalent to ``%m/%d/%y''.
+     %D    is equivalent to "%m/%d/%y".
 
      %d    is replaced by the day of the month as a decimal number (01-31).
 
      %e    is replaced by the day of the month as a decimal number (1-31);
            single digits are preceded by a blank.
 
-     %F    is equivalent to ``%Y-%m-%d''.
+     %F    is equivalent to "%Y-%m-%d".
 
      %f    is replaced by the microsecond as a decimal number (000000-999999).
 
@@ -311,16 +319,16 @@ FORMATTING DIRECTIVES
      %p    is replaced by national representation of either "ante meridiem"
            (a.m.)  or "post meridiem" (p.m.)  as appropriate.
 
-     %R    is equivalent to ``%H:%M''.
+     %R    is equivalent to "%H:%M".
 
-     %r    is equivalent to ``%I:%M:%S %p''.
+     %r    is equivalent to "%I:%M:%S %p".
 
      %S    is replaced by the second as a decimal number (00-60).
 
      %s    is replaced by the number of seconds since the Epoch, UTC (see
            mktime(3)).
 
-     %T    is equivalent to ``%H:%M:%S''.
+     %T    is equivalent to "%H:%M:%S".
 
      %t    is replaced by a tab.
 
@@ -336,7 +344,7 @@ FORMATTING DIRECTIVES
            otherwise it is the last week of the previous year, and the next
            week is week 1.
 
-     %v    is equivalent to ``%e-%b-%Y''.
+     %v    is equivalent to "%e-%b-%Y".
 
      %W    is replaced by the week number of the year (Monday as the first day
            of the week) as a decimal number (00-53).
@@ -366,12 +374,13 @@ SEE ALSO
      ts(1), strftime(3)
 
 HISTORY
-     The name ets comes from ``enhanced ts'', referring to moreutils ts(1).
+     The name ets comes from "enhanced ts",referring to moreutils ts(1).
 
 AUTHORS
      Zhiming Wang <i@zhimingwang.org>
+     and Contributors
 
-                                 July 3, 2020
+                                  May 1, 2024
 ```
 
 <!-- end manpage -->
@@ -397,9 +406,18 @@ Disadvantages:
 
 See [here](./CHANGELOG.md).
 
+## Releases
+
+1. Add version info the [changelog](./CHANGELOG.md).
+2. Update manpage in [ets.1](./ets.1) (f.e. with https://roperzh.github.io/grapse/) and run `./tools/update-readme.sh` to update the manpage in the README.
+3. Commit and push the changes!
+4. Create a tag and push it to GitHub, f.e. `git tag v0.3.0 && git push --tags`.
+5. Update the release on GitHub with the changelog entry.
+6. Update the version and hash for homebrew in [ets.rb](Formula/ets.rb), commit and push.
+
 ## License
 
-Copyright © 2020 Zhiming Wang <i@zhimingwang.org>
+Copyright © 2020-∞ Zhiming Wang <i@zhimingwang.org> and Contributors
 
 The project is distributed under [the MIT license](https://opensource.org/licenses/MIT).
 

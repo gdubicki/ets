@@ -1,4 +1,4 @@
-.Dd July 3, 2020
+.Dd May 1, 2024
 .Dt ETS 1
 .Sh NAME
 .Nm ets
@@ -8,6 +8,7 @@
 .Op Fl s | i
 .Op Fl f Ar format
 .Op Fl u | z Ar timezone
+.Op Fl d Ar delimiter
 .Ar command
 .Op Ar arg ...
 .Nm
@@ -103,6 +104,10 @@ This option is mutually exclusive with
 .Fl u, -utc Ns .
 .It Fl c, -color
 Print timestamps in color.
+.It Fl d, -delimit
+Change the delimiter between the timestamp and the command output.
+.Pp
+The default is space.
 .El
 .Sh FORMATTING DIRECTIVES
 Formatting directives largely match
@@ -264,3 +269,4 @@ referring to moreutils
 .Xr ts 1 Ns .
 .Sh AUTHORS
 .An Zhiming Wang Aq Mt i@zhimingwang.org
+.An and Contributors
