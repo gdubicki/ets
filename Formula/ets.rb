@@ -1,8 +1,8 @@
 class Ets < Formula
   desc "Command output timestamper"
   homepage "https://github.com/gdubicki/ets"
-  url "https://github.com/gdubicki/ets/archive/v0.2.2.tar.gz"
-  sha256 "decfe53acb1a912b51c81c22695f92caa72c79f1d6ec5ef23d0fb6be4e1f2db5"
+  url "https://github.com/gdubicki/ets/archive/v0.3.0.tar.gz"
+  sha256 "0586c5f1608c0a8eba7a27e2e0605129cab634c21d1206eb99fabdf70f68af3d"
 
   depends_on "go" => :build
 
