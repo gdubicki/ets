@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://github.com/gdubicki/ets/releases"><img src="https://img.shields.io/github/v/release/gdubicki/ets" alt="GitHub release" /></a>
-  <a href="https://github.com/gdubicki/ets/actions"><img src="https://github.com/gdubicki/ets/workflows/test/badge.svg?branch=master" alt="Build status" /></a>
+  <a href="https://github.com/gdubicki/ets/actions"><img src="https://github.com/gdubicki/ets/actions/workflows/test.yml/badge.svg" alt="Build status" /></a>
 </p>
 
 <p align="center"><img src="assets/animation.svg" alt="ets" /></p>
