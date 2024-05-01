@@ -25,6 +25,7 @@ The purpose of `ets` is similar to that of moreutils [`ts(1)`](https://manpages.
 - [Usage](#usage)
 - [Comparison to moreutils ts](#comparison-to-moreutils-ts)
 - [Changelog](#changelog)
+- [Contributing](#contributing)
 - [Releases](#releases)
 - [License](#license)
 
@@ -406,14 +407,17 @@ Disadvantages:
 
 See [here](./CHANGELOG.md).
 
+## Contributing
+
+1. Use `gofmt` for formatting your code. You can use provided [pre-commit](https://pre-commit.com/) config to make you life easier.
+2. If you add or change a feature, update the manpage in [ets.1](./ets.1) f.e. with https://roperzh.github.io/grapse/ and then run `./tools/update-readme.sh` to update the manpage in the README.
+
 ## Releases
 
-1. Add version info the [changelog](./CHANGELOG.md).
-2. Update manpage in [ets.1](./ets.1) (f.e. with https://roperzh.github.io/grapse/) and run `./tools/update-readme.sh` to update the manpage in the README.
-3. Commit and push the changes!
-4. Create a tag and push it to GitHub, f.e. `git tag v0.3.0 && git push --tags`.
-5. Update the release on GitHub with the changelog entry.
-6. Update the version and hash for homebrew in [ets.rb](Formula/ets.rb), commit and push.
+1. Add version info the [changelog](./CHANGELOG.md). Commit and push the changes!
+2. Create a tag and push it to GitHub, f.e. `git tag v0.3.0 && git push --tags`.
+3. Update the release on GitHub with the changelog entry.
+4. Update the version and hash for homebrew in [ets.rb](Formula/ets.rb), commit and push.
 
 ## License
 
