@@ -1,5 +1,10 @@
 ## Changelog
 
+### 0.3.1
+
+* Golang updated from 1.22 to 1.23,
+* Dependencies update for March 2025,
+
 ### 0.3.0
 
 * Add custom delimiter option, [PR #3](https://github.com/gdubicki/ets/pull/3) by [Luke Hamburg](https://github.com/luckman212). Thanks for the contribution!
