@@ -4,6 +4,7 @@
 
 * Golang updated from 1.22 to 1.23,
 * Dependencies update for March 2025,
+* CI/CD updates
 
 ### 0.3.0
 
