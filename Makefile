@@ -12,7 +12,7 @@ shorttest:
 	go test -v -short
 
 snapshot:
-	goreleaser --snapshot --skip-publish --rm-dist
+	goreleaser --snapshot --skip=publish --clean
 
 update-readme:
 	tools/update-readme.sh
