@@ -1,3 +1,3 @@
-module github.com/gdubicki/ets/fxitures/basic
+module github.com/gdubicki/ets/fixtures/basic
 
-go 1.22
+go 1.26.0

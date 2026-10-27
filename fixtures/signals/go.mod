@@ -1,3 +1,3 @@
-module github.com/gdubicki/ets/fxitures/signals
+module github.com/gdubicki/ets/fixtures/signals
 
-go 1.22
+go 1.26.0

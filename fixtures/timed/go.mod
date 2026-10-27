@@ -1,3 +1,3 @@
-module github.com/gdubicki/ets/fxitures/timed
+module github.com/gdubicki/ets/fixtures/timed
 
-go 1.22
+go 1.26.0
