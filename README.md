@@ -1,5 +1,5 @@
 <p align="center">A fork of <a href="https://github.com/zmwangx/ets">https://github.com/zmwangx/ets</a>, written by <a href="https://github.com/zmwangx">Zhiming Wang</a></p>
-<p align="center">with a release and updates in 2025</p>
+<p align="center">with updates in 2026</p>
 
 <h1 align="center"><img src="assets/logo.svg" height="50" alt="ets" /></h1>
 
@@ -13,7 +13,7 @@
 
 `ets` is a command output timestamper — it prefixes each line of a command's output with a timestamp.
 
-The purpose of `ets` is similar to that of moreutils [`ts(1)`](https://manpages.ubuntu.com/manpages/focal/en/man1/ts.1.html), but `ets` differentiates itself from similar offerings by running commands directly within ptys, hence solving thorny issues like pipe buffering and commands disabling color and interactive features when detecting a pipe as output. (`ets` does provide a reading-from-stdin mode if you insist.) `ets` also recognizes carriage return as a line seperator, so it doesn't choke if your command prints a progress bar. A more detailed comparison of `ets` and `ts` can be found [below](#comparison-to-moreutils-ts).
+The purpose of `ets` is similar to that of moreutils [`ts(1)`](https://manpages.debian.org/moreutils/ts.1), but `ets` differentiates itself from similar offerings by running commands directly within ptys, hence solving thorny issues like pipe buffering and commands disabling color and interactive features when detecting a pipe as output. (`ets` does provide a reading-from-stdin mode if you insist.) `ets` also recognizes carriage return as a line separator, so it doesn't choke if your command prints a progress bar. A more detailed comparison of `ets` and `ts` can be found [below](#comparison-to-moreutils-ts).
 
 `ets` currently supports macOS, Linux, and various other *ix variants.
 
@@ -156,12 +156,12 @@ $ ets -d " | " ping localhost
   brew install gdubicki/ets/ets
   ```
 
-- On macOS and Linux you get download a prebuilt tarball/package from the [release page](https://github.com/gdubicki/ets/releases).
+- On macOS and Linux you can download a prebuilt tarball/package from the [release page](https://github.com/gdubicki/ets/releases). You can verify their build provenance with `gh attestation verify <file> --repo gdubicki/ets`.
 
 - On a supported platform, if you have the Go toolchain installed, you may install with
 
   ```
-  go get github.com/gdubicki/ets
+  go install github.com/gdubicki/ets@latest
   ```
 
 ## Usage
@@ -409,7 +409,7 @@ See [here](./CHANGELOG.md).
 
 ## Contributing
 
-1. Use `gofmt` for formatting your code. You can use provided [pre-commit](https://pre-commit.com/) config to make you life easier.
+1. Use `gofmt` for formatting your code and make sure that `make lint` (requires [golangci-lint](https://golangci-lint.run/) v2) and `make test` pass. You can use provided [pre-commit](https://pre-commit.com/) config to make your life easier.
 2. If you add or change a feature, update the manpage in [ets.1](./ets.1) f.e. with https://roperzh.github.io/grapse/ and then run `./tools/update-readme.sh` to update the manpage in the README.
 
 ## Releases

@@ -1,5 +1,12 @@
 ## Changelog
 
+### Unreleased
+
+* Golang updated from 1.23 to 1.26,
+* Code and tests modernization, fixed a data race in tests,
+* Release artifacts now have build provenance attestations,
+* CI/CD updates: golangci-lint v2, tests on macOS, tests on PRs, Dependabot for Go modules
+
 ### 0.3.1
 
 * Golang updated from 1.22 to 1.23,
