@@ -1,6 +1,6 @@
 ## Changelog
 
-### Unreleased
+### 0.3.2
 
 * Golang updated from 1.23 to 1.26,
 * Code and tests modernization, fixed a data race in tests,
