@@ -1,6 +1,7 @@
 package main_test
 
 import (
+	"bytes"
 	"io"
 	"log"
 	"os"
@@ -45,7 +46,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer os.RemoveAll(tempdir)
+	defer func() { _ = os.RemoveAll(tempdir) }()
 
 	executable = path.Join(tempdir, "ets")
 
@@ -219,7 +220,7 @@ func TestStdin(t *testing.T) {
 	cmd := exec.Command("./ets")
 	stdin, _ := cmd.StdinPipe()
 	go func() {
-		defer stdin.Close()
+		defer func() { _ = stdin.Close() }()
 		_, _ = stdin.Write([]byte(input))
 	}()
 	output, err := cmd.Output()
@@ -290,16 +291,19 @@ func TestSignals(t *testing.T) {
 		t.Skip("skipping slow test in short mode")
 	}
 	cmd := exec.Command("./ets", "./signals")
-	go func() {
-		time.Sleep(time.Second)
-		_ = cmd.Process.Signal(syscall.SIGINT)
-		time.Sleep(time.Second)
-		_ = cmd.Process.Signal(syscall.SIGTERM)
-	}()
-	output, err := cmd.Output()
-	if err != nil {
+	var stdout bytes.Buffer
+	cmd.Stdout = &stdout
+	if err := cmd.Start(); err != nil {
+		t.Fatalf("failed to start command: %s", err)
+	}
+	time.Sleep(time.Second)
+	_ = cmd.Process.Signal(syscall.SIGINT)
+	time.Sleep(time.Second)
+	_ = cmd.Process.Signal(syscall.SIGTERM)
+	if err := cmd.Wait(); err != nil {
 		t.Fatalf("command failed: %s", err)
 	}
+	output := stdout.Bytes()
 	parsed := parseOutput(output, `\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]`)
 	outputs := make([]string, 0)
 	for _, pl := range parsed {
