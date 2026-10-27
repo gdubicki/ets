@@ -72,7 +72,7 @@ func runCommandWithTimestamper(args []string, timestamper *Timestamper, delim st
 		winsize, err := pty.GetsizeFull(os.Stdin)
 		if err != nil {
 			// Most likely stdin isn't a tty, in which case we don't care.
-			return winsize
+			return nil
 		}
 		totalCols := winsize.Cols
 		plainTimestampString := ansiEscapes.ReplaceAllString(timestamper.CurrentTimestampString(), "")
@@ -103,7 +103,11 @@ func runCommandWithTimestamper(args []string, timestamper *Timestamper, delim st
 		for sig := range sigs {
 			switch sig {
 			case syscall.SIGWINCH:
-				if err := pty.Setsize(ptmx, getPtyWinsize()); err != nil {
+				winsize := getPtyWinsize()
+				if winsize == nil {
+					continue
+				}
+				if err := pty.Setsize(ptmx, winsize); err != nil {
 					log.Println("error resizing pty:", err)
 				}
 

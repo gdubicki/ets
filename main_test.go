@@ -270,6 +270,19 @@ func TestIncrementalMode(t *testing.T) {
 	}
 }
 
+func TestNonTTYStdinNoErrors(t *testing.T) {
+	// Stdin of a command without explicit Stdin is /dev/null, i.e. not a tty.
+	cmd := exec.Command("./ets", "./basic")
+	var stderr bytes.Buffer
+	cmd.Stderr = &stderr
+	if _, err := cmd.Output(); err != nil {
+		t.Fatalf("command failed: %s", err)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("unexpected stderr output: %#v", stderr.String())
+	}
+}
+
 func TestExitCode(t *testing.T) {
 	for code := 1; code < 6; code++ {
 		t.Run("exitcode-"+strconv.Itoa(code), func(t *testing.T) {
