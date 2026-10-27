@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -11,6 +12,7 @@ import (
 	"os/signal"
 	"regexp"
 	"strconv"
+	"strings"
 	"syscall"
 	"time"
 
@@ -252,7 +254,7 @@ Options:
 	} else {
 		if len(args) == 1 {
 			arg0 := args[0]
-			if matched, _ := regexp.MatchString(`\s`, arg0); matched {
+			if strings.ContainsAny(arg0, " \t\n\f\r") {
 				shell, err := loginshell.Shell()
 				if err != nil {
 					shell = "sh"
@@ -261,7 +263,7 @@ Options:
 			}
 		}
 		if err = runCommandWithTimestamper(args, timestamper, *delim); err != nil {
-			if exitErr, ok := err.(*exec.ExitError); ok {
+			if exitErr, ok := errors.AsType[*exec.ExitError](err); ok {
 				exitCode = exitErr.ExitCode()
 			} else {
 				log.Fatal(err)

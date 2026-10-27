@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path"
-	"reflect"
+	"path/filepath"
 	"regexp"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 	"syscall"
@@ -25,7 +25,7 @@ var executable string
 
 func init() {
 	_, currentFile, _, _ := runtime.Caller(0)
-	rootdir = path.Dir(currentFile)
+	rootdir = filepath.Dir(currentFile)
 }
 
 func compile(moduledir string, output string) {
@@ -48,11 +48,11 @@ func TestMain(m *testing.M) {
 	}
 	defer func() { _ = os.RemoveAll(tempdir) }()
 
-	executable = path.Join(tempdir, "ets")
+	executable = filepath.Join(tempdir, "ets")
 
 	// Build ets and test fixtures to tempdir.
 	compile(rootdir, executable)
-	fixturesdir := path.Join(rootdir, "fixtures")
+	fixturesdir := filepath.Join(rootdir, "fixtures")
 	content, err := os.ReadDir(fixturesdir)
 	if err != nil {
 		log.Fatal(err)
@@ -60,7 +60,7 @@ func TestMain(m *testing.M) {
 	for _, entry := range content {
 		if entry.IsDir() {
 			name := entry.Name()
-			compile(path.Join(fixturesdir, name), path.Join(tempdir, name))
+			compile(filepath.Join(fixturesdir, name), filepath.Join(tempdir, name))
 		}
 	}
 
@@ -115,6 +115,20 @@ func parseOutput(output []byte, prefixPattern string) []*parsedLine {
 		}
 	}
 	return parsed
+}
+
+// prefixedOutputs returns the outputs of all lines, failing the test for
+// lines without the expected prefix.
+func prefixedOutputs(t *testing.T, output []byte, prefixPattern string) []string {
+	t.Helper()
+	outputs := make([]string, 0)
+	for _, pl := range parseOutput(output, prefixPattern) {
+		if pl.prefix == "" {
+			t.Errorf("unexpected line: %s", pl.raw)
+		}
+		outputs = append(outputs, pl.output)
+	}
+	return outputs
 }
 
 func TestBasic(t *testing.T) {
@@ -187,15 +201,8 @@ func TestBasic(t *testing.T) {
 			if err != nil {
 				t.Fatalf("command failed: %s", err)
 			}
-			parsed := parseOutput(output, test.prefixPattern)
-			outputs := make([]string, 0)
-			for _, pl := range parsed {
-				if pl.prefix == "" {
-					t.Errorf("unexpected line: %s", pl.raw)
-				}
-				outputs = append(outputs, pl.output)
-			}
-			if !reflect.DeepEqual(outputs, test.expectedOutputs) {
+			outputs := prefixedOutputs(t, output, test.prefixPattern)
+			if !slices.Equal(outputs, test.expectedOutputs) {
 				t.Fatalf("wrong outputs: expected %#v, got %#v", test.expectedOutputs, outputs)
 			}
 		})
@@ -227,15 +234,8 @@ func TestStdin(t *testing.T) {
 	if err != nil {
 		t.Fatalf("command failed: %s", err)
 	}
-	parsed := parseOutput(output, `\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]`)
-	outputs := make([]string, 0)
-	for _, pl := range parsed {
-		if pl.prefix == "" {
-			t.Errorf("unexpected line: %s", pl.raw)
-		}
-		outputs = append(outputs, pl.output)
-	}
-	if !reflect.DeepEqual(outputs, expectedOutputs) {
+	outputs := prefixedOutputs(t, output, `\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]`)
+	if !slices.Equal(outputs, expectedOutputs) {
 		t.Fatalf("wrong outputs: expected %#v, got %#v", expectedOutputs, outputs)
 	}
 }
@@ -304,26 +304,13 @@ func TestSignals(t *testing.T) {
 		t.Fatalf("command failed: %s", err)
 	}
 	output := stdout.Bytes()
-	parsed := parseOutput(output, `\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]`)
-	outputs := make([]string, 0)
-	for _, pl := range parsed {
-		if pl.prefix == "" {
-			t.Errorf("unexpected line: %s", pl.raw)
-		}
-		outputs = append(outputs, pl.output)
-	}
+	outputs := prefixedOutputs(t, output, `\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\]`)
 	for _, expectedOutput := range []string{
 		"busy waiting",
 		"ignored SIGINT",
 		"shutting down after receiving SIGTERM",
 	} {
-		found := false
-		for _, output := range outputs {
-			if output == expectedOutput {
-				found = true
-				break
-			}
-		}
+		found := slices.Contains(outputs, expectedOutput)
 		if !found {
 			t.Errorf("expected output %#v not found in outputs %#v", expectedOutput, outputs)
 		}
@@ -387,15 +374,8 @@ func TestWindowSize(t *testing.T) {
 			if len(output) == 0 && err != nil {
 				t.Fatalf("failed to read pty output: %s", err)
 			}
-			parsed := parseOutput(output, test.prefixPattern)
-			outputs := make([]string, 0)
-			for _, pl := range parsed {
-				if pl.prefix == "" {
-					t.Errorf("unexpected line: %s", pl.raw)
-				}
-				outputs = append(outputs, pl.output)
-			}
-			if !reflect.DeepEqual(outputs, expectedOutputs) {
+			outputs := prefixedOutputs(t, output, test.prefixPattern)
+			if !slices.Equal(outputs, expectedOutputs) {
 				t.Fatalf("wrong outputs: expected %#v, got %#v", expectedOutputs, outputs)
 			}
 		})

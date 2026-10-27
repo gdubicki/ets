@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"log"
-	"math"
-	"strconv"
 	"time"
 
 	"github.com/lestrrat-go/strftime"
@@ -30,7 +27,7 @@ func NewTimestamper(format string, mode TimestampMode, timezone *time.Location) 
 	formatter, err := strftime.New(format,
 		strftime.WithMilliseconds('L'),
 		strftime.WithUnixSeconds('s'),
-		strftime.WithSpecification('f', microseconds))
+		strftime.WithMicroseconds('f'))
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +46,7 @@ func (t *Timestamper) CurrentTimestampString() string {
 	var s string
 	switch t.Mode {
 	case AbsoluteTimeMode:
-		s = t.Formatter.FormatString(time.Now().In(t.TZ))
+		s = t.Formatter.FormatString(now.In(t.TZ))
 	case ElapsedTimeMode:
 		s = formatDuration(t.Formatter, now.Sub(t.StartTimestamp))
 	case IncrementalTimeMode:
@@ -63,19 +60,4 @@ func (t *Timestamper) CurrentTimestampString() string {
 
 func formatDuration(formatter *strftime.Strftime, duration time.Duration) string {
 	return formatter.FormatString(time.Unix(0, duration.Nanoseconds()).UTC())
-}
-
-var microseconds strftime.Appender
-
-func init() {
-	microseconds = strftime.AppendFunc(func(b []byte, t time.Time) []byte {
-		microsecond := int(t.Nanosecond()) / int(time.Microsecond)
-		if microsecond == 0 {
-			return append(b, "000000"...)
-		} else {
-			length := int(math.Log10(float64(microsecond))) + 1
-			b = append(b, bytes.Repeat([]byte("0"), 6-length)...)
-			return append(b, strconv.Itoa(microsecond)...)
-		}
-	})
 }
