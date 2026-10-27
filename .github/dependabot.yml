@@ -3,6 +3,22 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
       timezone: "Atlantic/Canary"
       time: "19:30"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: "gomod"
+    directories:
+      - "/"
+      - "/fixtures/*"
+    schedule:
+      interval: "weekly"
+      timezone: "Atlantic/Canary"
+      time: "19:30"
+    groups:
+      go-modules:
+        patterns:
+          - "*"

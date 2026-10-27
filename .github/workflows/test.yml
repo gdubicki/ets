@@ -1,57 +1,48 @@
 name: test
 on:
   push:
+    branches:
+      - master
+  pull_request:
+permissions:
+  contents: read
 jobs:
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - .
+          - fixtures/basic
+          - fixtures/detect_tty
+          - fixtures/signals
+          - fixtures/timed
+          - fixtures/winsize
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
-          cache: false
-      - name: golangci-lint on .
-        uses: golangci/golangci-lint-action@v6
+          cache-dependency-path: ${{ matrix.module }}/go.sum
+      - name: golangci-lint on ${{ matrix.module }}
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
-          args: -E gofmt
-      - name: golangci-lint on fixtures/basic
-        uses: golangci/golangci-lint-action@v6
-        with:
-          working-directory: fixtures/basic
-          args: -E gofmt
-      - name: golangci-lint on fixtures/detect_tty
-        uses: golangci/golangci-lint-action@v6
-        with:
-          working-directory: fixtures/detect_tty
-          args: -E gofmt
-      - name: golangci-lint on fixtures/signals
-        uses: golangci/golangci-lint-action@v4
-        with:
-          working-directory: fixtures/signals
-          args: -E gofmt
-      - name: golangci-lint on fixtures/timed
-        uses: golangci/golangci-lint-action@v4
-        with:
-          working-directory: fixtures/timed
-          args: -E gofmt
-      - name: golangci-lint on fixtures/winsize
-        uses: golangci/golangci-lint-action@v4
-        with:
-          working-directory: fixtures/winsize
-          args: -E gofmt
+          version: v2.15.0
+          working-directory: ${{ matrix.module }}
 
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
-          cache: false
       - name: Test
-        run: |
-          make test
+        run: make test
