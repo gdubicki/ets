@@ -1,5 +1,9 @@
 ## Changelog
 
+### 0.3.3
+
+* Fixed `error resizing pty: bad address` printed when stdin is not a tty, [issue #7](https://github.com/gdubicki/ets/issues/7)
+
 ### 0.3.2
 
 * Golang updated from 1.23 to 1.26,
