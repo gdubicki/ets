@@ -1,5 +1,5 @@
 <p align="center">A fork of <a href="https://github.com/zmwangx/ets">https://github.com/zmwangx/ets</a>, written by <a href="https://github.com/zmwangx">Zhiming Wang</a></p>
-<p align="center">with updates in 2026</p>
+<p align="center">with releases in 2026</p>
 
 <h1 align="center"><img src="assets/logo.svg" height="50" alt="ets" /></h1>
 
